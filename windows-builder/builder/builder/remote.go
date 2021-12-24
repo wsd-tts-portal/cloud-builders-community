@@ -29,18 +29,20 @@ type Remote struct {
 }
 
 type BuilderServer struct {
-	ImageUrl       *string
-	VPC            *string
-	Subnet         *string
-	Region         *string
-	Zone           *string
-	Labels         *string
-	MachineType    *string
-	Preemptible    *bool
-	DiskSizeGb     *int64
-	DiskType       *string
-	ServiceAccount *string
-	Tags           *string
+	ImageUrl          *string
+	VPC               *string
+	Subnet            *string
+	Region            *string
+	Zone              *string
+	Labels            *string
+	MachineType       *string
+	Preemptible       *bool
+	DiskSizeGb        *int64
+	DiskType          *string
+	ServiceAccount    *string
+	Tags              *string
+	UseInternalNet    *bool
+	CreateExternalIP  *bool
 }
 
 // Wait for server to be available.
@@ -223,6 +225,10 @@ func (bs *BuilderServer) GetLabelsMap() map[string]string {
 }
 
 func (bs *BuilderServer) GetTags() []string {
+  if *bs.Tags == "" {
+    return nil
+  }
+
 	var tags []string
   for _, tag := range strings.Split(*bs.Tags, ",") {
 		tags = append(tags, strings.TrimSpace(tag))
